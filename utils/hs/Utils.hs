@@ -3,6 +3,7 @@ module Utils
 , test
 , groupByEmptyLines
 , diff
+, slidingWindow
 , Point2D (Point2D)
 , turnL
 , turnR
@@ -53,6 +54,14 @@ diff :: (Num a) => [a] -> [a]
 diff []     = []
 diff (_:[]) = []
 diff (x1:x2:xs) = (x2-x1) : diff (x2:xs)
+
+
+-- create list of sliding windows of length n
+slidingWindow :: Int -> [a] -> [[a]]
+slidingWindow n values
+    | length values == n = [values]
+    | length values < n  = []
+    | otherwise = (take n values) : (slidingWindow n (drop 1 values))
 
 
 -- ==================================================== 2D geometry
