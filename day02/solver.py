@@ -1,20 +1,12 @@
 from functools import wraps
 from datetime import datetime
+import sys
+
+sys.path.insert(0, "../utils/py")
+import utils
 
 
-times = []
-
-
-def measure_time(func):
-    @wraps(func)
-    def _func(*args, **kwargs):
-        start = datetime.now()
-        result = func(*args, **kwargs)
-        end = datetime.now()
-        times.append((func.__name__, (end - start).total_seconds()))
-        return result
-
-    return _func
+measure_time = utils.stopwatch()
 
 
 @measure_time
@@ -75,7 +67,7 @@ if __name__ == "__main__":
     print("Part 2: {}".format(solve2(data)))
 
     print("\nTime taken:")
-    for func, time in times:
+    for func, time in measure_time.times:
         print(f"{func:8}{time}s")
     print("----------------")
-    print("total   {}s".format(sum(t for _, t in times)))
+    print("total   {}s".format(sum(t for _, t in measure_time.times)))
