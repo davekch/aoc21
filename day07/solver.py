@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 
 sys.path.insert(0, "../utils/py")
 import utils
@@ -17,11 +18,8 @@ def parse(raw_data):
 def solve1(data):
     mn = min(data)
     mx = max(data)
-    fuels = []
-    for pos in range(mn, mx+1):
-        fuels.append(
-            sum([abs(x-pos) for x in data])
-        )
+    data = np.array(data)
+    fuels = [abs(data - pos).sum() for pos in range(mn, mx+1)]
     return min(fuels)
 
 
