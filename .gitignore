@@ -3,4 +3,6 @@
 *.cache
 *.pyc
 *.swp
+*.hi
+*.o
 aoc_session.sh
