@@ -11,11 +11,6 @@ import utils
 measure_time = utils.stopwatch()
 
 
-@measure_time
-def parse(raw_data):
-    return raw_data.splitlines()
-
-
 Result = Enum("Result", (
     "Ok",
     "Incomplete",
@@ -67,12 +62,16 @@ def check_syntax(line: str) -> tuple[Result, Optional[str | list]]:
         return (Result.Incomplete, [brackets[m] for m in reversed(queue.queue)])
 
 
+@measure_time
+def parse(raw_data):
+    return [check_syntax(line) for line in raw_data.splitlines()]
+
+
 # PART 1
 @measure_time
 def solve1(data):
     score = 0
-    for line in data:
-        result, error = check_syntax(line)
+    for result, error in data:
         if result == Result.Corrupted:
             score += error_score[error]
     return score
@@ -82,9 +81,8 @@ def solve1(data):
 @measure_time
 def solve2(data):
     scores = []
-    for line in data:
+    for result, missing in data:
         score = 0
-        result, missing = check_syntax(line)
         if result == Result.Incomplete:
             for m in missing:
                 score *= 5
